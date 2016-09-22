@@ -7,7 +7,6 @@ import * as paginateLinkTypes from '../../constants/paginateLinkTypes';
 import { getAndCombined } from '../../services/filter';
 import Activities from '../../components/Activities';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
-import { StreamInteractions } from '../../components/StreamInteractions';
 import { DURATION_FILTER_FUNCTIONS } from '../../constants/durationFilter';
 import { getTracknameFilter } from '../../constants/nameFilter';
 import { SORT_FUNCTIONS } from '../../constants/sort';
@@ -23,7 +22,6 @@ function StreamActivities({
 }) {
   return (
     <div>
-      <StreamInteractions />
       <Activities
         isLoading={requestInProcess && !activities}
         entities={trackEntities}

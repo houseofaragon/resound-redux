@@ -4,14 +4,7 @@ import { Permalink } from '../../components/Permalink';
 import { Actions } from '../../components/HoverActions';
 import { isSameTrackAndPlaying, isSameTrack } from '../../services/player';
 
-function TrackPlaylist({
-  activity,
-  userEntities,
-  activeTrackId,
-  isPlaying,
-  onActivateTrack,
-  onRemoveTrackFromPlaylist
-}) {
+function TrackPlaylist({ activity, userEntities, activeTrackId, isPlaying, onActivateTrack, onRemoveTrackFromPlaylist }) {
   if (!activity) { return null; }
 
   const { user, title, permalink_url, artwork_url } = activity;

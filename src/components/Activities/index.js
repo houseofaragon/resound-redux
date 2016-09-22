@@ -6,43 +6,33 @@ import withLoadingSpinner from '../../components/withLoadingSpinner';
 import { TrackStreamContainer } from '../../components/Track';
 import { TrackExtensionContainer } from '../../components/TrackExtension';
 
-function Activity({
-  activity,
-  idx
-}) {
+function Activity({ activity, idx }) {
   return (
     <li>
       <TrackStreamContainer activity={activity} idx={idx} />
       <TrackExtensionContainer activity={activity} />
     </li>
-  );
+  )
 }
 
 function getMatchedEntities(ids, entities) {
   return map((id) => entities[id], ids);
 }
 
-function Activities({
-  ids,
-  entities,
-  activeFilter,
-  activeSort,
-}) {
+function Activities({ ids, entities, activeFilter, activeSort, }) {
   const matchedEntities = getMatchedEntities(ids, entities);
   const filteredEntities = filter(activeFilter, matchedEntities);
   const sortedEntities = activeSort(filteredEntities);
 
   return (
-    <div>
       <div>
-        <ul>
+        <ul className="track-container">
           {map((activity, idx) => {
             const activityProps = { activity, idx };
             return <Activity key={idx} { ...activityProps } />;
           }, sortedEntities)}
         </ul>
       </div>
-    </div>
   );
 }
 

@@ -6,22 +6,20 @@ import { SORT_FUNCTIONS } from '../../constants/sort';
 import { DURATION_FILTER_FUNCTIONS } from '../../constants/durationFilter';
 import * as actions from '../../actions/index';
 import * as requestTypes from '../../constants/requestTypes';
-import { StreamInteractions } from '../../components/StreamInteractions';
 import Activities from '../../components/Activities';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
 import { getTracknameFilter } from '../../constants/nameFilter';
 import { getAndCombined } from '../../services/filter';
 
 class Browse extends React.Component {
-
   constructor(props) {
     super(props);
     this.fetchActivitiesByGenre = this.fetchActivitiesByGenre.bind(this);
   }
 
   componentDidMount() {
-    if (!this.needToFetchActivities()) { return; }
-    this.fetchActivitiesByGenre();
+    if (!this.needToFetchActivities()) { return }
+    this.fetchActivitiesByGenre()
   }
 
   componentDidUpdate() {
@@ -42,10 +40,8 @@ class Browse extends React.Component {
 
   render() {
     const { browseActivities, genre, requestsInProcess, trackEntities, activeFilter, activeSort } = this.props;
-
     return (
       <div className="browse">
-        <StreamInteractions />
         <Activities
           isLoading={requestsInProcess[requestTypes.GENRES] && !browseActivities[genre]}
           ids={browseActivities[genre]}
@@ -58,7 +54,6 @@ class Browse extends React.Component {
       </div>
     );
   }
-
 }
 
 function mapStateToProps(state, routerState) {

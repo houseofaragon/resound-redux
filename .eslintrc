@@ -16,6 +16,8 @@
     "arrow-body-style": 0,
     "no-use-before-define": 0,
     "space-before-function-paren": [2, { "anonymous": "never", "named": "never" }],
-    "max-len": [1, 120, 2, {ignoreComments: true}]
+    "max-len": [1, 120, 2, {ignoreComments: true}],
+    "no-extra-semi": 2,
+    "semi": 0
   }
 }

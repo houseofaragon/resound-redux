@@ -1,6 +1,5 @@
 .stream-interactions {
   display: flex;
-  padding-bottom: ($padding / 2);
 
   &-item {
     background: $backgroundSecondary;
@@ -12,7 +11,7 @@
 
 .stream-interaction {
   display: flex;
-  align-items: flex-end;
+  align-items: flex-start;
 
   &-icon {
     font-size: $mediumIcon;
