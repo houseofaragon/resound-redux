@@ -24,9 +24,9 @@ ReactDOM.render(
     <Router history={history}>
       <Route path="/" component={App}>
         <IndexRoute component={BrowseContainer} />
+        <Route path={browse} component={BrowseContainer} />
         <Route path={callback} component={Callback} />
         <Route path={dashboard} component={Dashboard} />
-        <Route path={browse} component={BrowseContainer} />
         <Route path={fave} component={Fave} />
         <Route path="*" component={BrowseContainer} />
       </Route>

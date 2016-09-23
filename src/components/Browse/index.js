@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { DEFAULT_GENRE } from '../../constants/genre';
+import { DEFAULT_ARTIST } from '../../constants/artists';
 import { SORT_FUNCTIONS } from '../../constants/sort';
 import { DURATION_FILTER_FUNCTIONS } from '../../constants/durationFilter';
 import * as actions from '../../actions/index';
@@ -14,43 +14,58 @@ import { getAndCombined } from '../../services/filter';
 class Browse extends React.Component {
   constructor(props) {
     super(props);
-    this.fetchActivitiesByGenre = this.fetchActivitiesByGenre.bind(this);
+    this.fetchActivitiesByArtist = this.fetchActivitiesByArtist.bind(this);
+    this.fetchArtistBio = this.fetchArtistBio.bind(this);
   }
 
   componentDidMount() {
     if (!this.needToFetchActivities()) { return }
-    this.fetchActivitiesByGenre()
+    this.fetchActivitiesByArtist()
+    this.fetchArtistBio()
   }
 
   componentDidUpdate() {
     if (!this.needToFetchActivities()) { return; }
-    this.fetchActivitiesByGenre();
+    this.fetchActivitiesByArtist();
+    this.fetchArtistBio()
   }
 
-  fetchActivitiesByGenre() {
-    const { genre, paginateLinks } = this.props;
-    const nextHref = paginateLinks[genre];
-    this.props.fetchActivitiesByGenre(nextHref, genre);
+  fetchArtistBio() {
+    const { artist, paginateLinks } = this.props;
+    const nextHref = paginateLinks[artist];
+    this.props.fetchArtistBio(nextHref, artist);
+  }
+
+  fetchActivitiesByArtist() {
+    const { artist, paginateLinks } = this.props;
+    const nextHref = paginateLinks[artist];
+    this.props.fetchActivitiesByArtist(nextHref, artist);
   }
 
   needToFetchActivities() {
-    const { genre, browseActivities } = this.props;
-    return !browseActivities[genre] || browseActivities[genre].length < 20;
+    const { artist, browseActivities } = this.props;
+    return !browseActivities[artist] || browseActivities[artist].length < 20;
   }
 
   render() {
-    const { browseActivities, genre, requestsInProcess, trackEntities, activeFilter, activeSort } = this.props;
+    const { browseActivities, bio, artist, requestsInProcess, trackEntities, activeFilter, activeSort } = this.props;
     return (
-      <div className="browse">
-        <Activities
-          isLoading={requestsInProcess[requestTypes.GENRES] && !browseActivities[genre]}
-          ids={browseActivities[genre]}
-          entities={trackEntities}
-          activeFilter={activeFilter}
-          activeSort={activeSort}
-          scrollFunction={this.fetchActivitiesByGenre}
-        />
-        <LoadingSpinner isLoading={requestsInProcess[requestTypes.GENRES] && browseActivities[genre]} />
+      <div className="dashboard">
+        <div className="dashboard-main">
+          <Activities
+            isLoading={requestsInProcess[requestTypes.ARTISTS] && !browseActivities[artist]}
+            ids={browseActivities[artist]}
+            entities={trackEntities}
+            activeFilter={activeFilter}
+            activeSort={activeSort}
+            scrollFunction={this.fetchActivitiesByArtist}
+          />
+        </div>
+        <div className="dashboard-side">
+          <h1>{artist}</h1>
+          <p>{bio}</p>
+        </div>
+        <LoadingSpinner isLoading={requestsInProcess[requestTypes.ARTISTS] && browseActivities[artist]} />
       </div>
     );
   }
@@ -63,7 +78,8 @@ function mapStateToProps(state, routerState) {
   ];
 
   return {
-    genre: routerState.location.query.genre,
+    artist: routerState.location.query.artist,
+    bio: state.browse.bio,
     browseActivities: state.browse,
     requestsInProcess: state.request,
     paginateLinks: state.paginate,
@@ -76,22 +92,25 @@ function mapStateToProps(state, routerState) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchActivitiesByGenre: bindActionCreators(actions.fetchActivitiesByGenre, dispatch)
+    fetchActivitiesByArtist: bindActionCreators(actions.fetchActivitiesByArtist, dispatch),
+    fetchArtistBio: bindActionCreators(actions.fetchArtistBio, dispatch),
   };
 }
 
 Browse.propTypes = {
-  genre: React.PropTypes.string,
+  artist: React.PropTypes.string,
+  bio: React.PropTypes.string,
   browseActivities: React.PropTypes.object,
   requestsInProcess: React.PropTypes.object,
   paginateLinks: React.PropTypes.object,
   trackEntities: React.PropTypes.object,
   userEntities: React.PropTypes.object,
-  fetchActivitiesByGenre: React.PropTypes.func
+  fetchActivitiesByArtist: React.PropTypes.func,
+  fetchArtistBio: React.PropTypes.func
 };
 
 Browse.defaultProps = {
-  genre: DEFAULT_GENRE
+  artist: DEFAULT_ARTIST
 };
 
 const BrowseContainer = connect(mapStateToProps, mapDispatchToProps)(Browse);

@@ -33,6 +33,5 @@ InfoList.propTypes = {
 
 export {
   InfoList,
-
   InfoItem
 };

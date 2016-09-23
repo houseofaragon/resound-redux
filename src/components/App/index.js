@@ -9,12 +9,12 @@ export default class App extends React.Component {
   render() {
     const { location, children } = this.props;
     const { pathname, query } = location;
-    const genre = query.genre;
+    const artist = query.artist;
 
     return (
       <div>
-        <HeaderContainer genre={genre} pathname={pathname} />
-          {children}
+        <HeaderContainer artist={artist} pathname={pathname} />
+        { children }
         <PlaylistContainer />
         <VolumeContainer />
         <PlayerContainer />

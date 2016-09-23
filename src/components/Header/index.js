@@ -1,17 +1,17 @@
 import React from 'react'
 import { Link } from 'react-router'
+import map from '../../services/map';
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import * as actions from '../../actions/index'
-import { DEFAULT_GENRE } from '../../constants/genre'
+import { ARTISTS, DEFAULT_ARTIST } from '../../constants/artists'
 import { browse, fave, dashboard } from '../../constants/pathnames'
-import { StreamInteractions } from '../../components/StreamInteractions'
+import classNames from 'classnames';
 
-/*
-const getGenreLink = (genre) => {
-  return browse + '?genre=' + genre;
+function getArtistLink(artist) {
+  return browse + '?artist=' + artist;
 }
-*/
+
 
 const Logo = () => {
   return (
@@ -23,24 +23,34 @@ const Logo = () => {
   )
 }
 
-/*
-function MenuItem({ pathname, selectedGenre, genre }) {
+function MenuItem({ pathname, selectedArtist, artist }) {
   if (pathname !== browse) { return null; }
 
   const linkClass = classNames(
     'menu-item',
     {
-      'menu-item-selected': genre === selectedGenre
+      'menu-item-selected': artist === selectedArtist
     }
   );
 
   return (
-    <Link to={getGenreLink(genre)} className={linkClass}>
-      {genre}
+    <Link to={getArtistLink(artist)} className={linkClass}>
+      {artist}
     </Link>
   );
 }
-*/
+
+function MenuList({ selectedArtist, pathname }) {
+  return (
+    <div>
+      {map((artist, idx) => {
+        const menuItemProps = { artist, selectedArtist, pathname };
+        return <MenuItem key={idx} { ...menuItemProps } />;
+      }, ARTISTS)}
+    </div>
+  );
+}
+
 const Login = ({ onLogin }) => {
   return (
     <Link onClick={onLogin} to={dashboard}>
@@ -65,24 +75,13 @@ const SessionAction = ({ currentUser, onLogin, onLogout }) => {
   )
 }
 
-/*
-function MenuList({ selectedGenre, pathname }) {
-  return (
-    <div>
-      {map((genre, idx) => {
-        const menuItemProps = { genre, selectedGenre, pathname };
-        return <MenuItem key={idx} { ...menuItemProps } />;
-      }, GENRES)}
-    </div>
-  );
-}
-*/
-const Header = ({ currentUser, genre, onLogin, onLogout, onChangeLocation }) => {
+
+const Header = ({ currentUser, artist, pathname, onLogin, onLogout, onChangeLocation }) => {
   return (
     <div className="header">
       <div className="header-content">
-        <Logo genre={genre} />
-        <StreamInteractions />
+        <Logo />
+        <MenuList selectedArtist={artist} pathname={pathname} />
         <SessionAction currentUser={currentUser} onLogin={onLogin} onLogout={onLogout} />
       </div>
       <div className="header-hidden">
@@ -95,7 +94,7 @@ const Header = ({ currentUser, genre, onLogin, onLogout, onChangeLocation }) => 
 const mapStateToProps = (state, props) => {
   return {
     currentUser: state.session.user,
-    genre: props.genre,
+    artist: props.artist,
     pathname: props.pathname
   }
 }
@@ -110,7 +109,7 @@ const mapDispatchToProps = (dispatch) => {
 
 Header.propTypes = {
   currentUser: React.PropTypes.object,
-  genre: React.PropTypes.string,
+  artist: React.PropTypes.string,
   pathname: React.PropTypes.string,
   onLogin: React.PropTypes.func,
   onLogout: React.PropTypes.func,
@@ -118,7 +117,7 @@ Header.propTypes = {
 }
 
 Header.defaultProps = {
-  genre: DEFAULT_GENRE
+  artist: DEFAULT_ARTIST
 }
 
 const HeaderContainer = connect(mapStateToProps, mapDispatchToProps)(Header);

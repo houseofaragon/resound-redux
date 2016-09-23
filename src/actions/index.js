@@ -2,7 +2,7 @@
 import { login, logout } from './session';
 import { changeLocation } from './location';
 import { fetchActivities, fetchFollowers, fetchFavorites, fetchFollowings } from './user';
-import { fetchActivitiesByGenre } from './browse';
+import { fetchActivitiesByArtist, fetchArtistBio } from './browse';
 import { like } from './track';
 import { follow } from './following';
 import { setToggle } from './toggle';
@@ -29,7 +29,8 @@ export {
   like,
   follow,
   setToggle,
-  fetchActivitiesByGenre,
+  fetchActivitiesByArtist,
+  fetchArtistBio,
   openComments,
   fetchComments,
   filterDuration,

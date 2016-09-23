@@ -7,20 +7,43 @@ import { setRequestInProcess } from '../../actions/request';
 import { setPaginateLink } from '../../actions/paginate';
 import { mergeEntities } from '../../actions/entities';
 
-function mergeActivitiesByGenre(activities, genre) {
+function mergeActivitiesByArtist(activities, artist) {
   return {
-    type: actionTypes.MERGE_GENRE_ACTIVITIES,
+    type: actionTypes.MERGE_ARTIST_ACTIVITIES,
     activities,
-    genre
-  };
+    artist
+  }
 }
 
-export const fetchActivitiesByGenre = (nextHref, genre) => (dispatch, getState) => {
-  const requestType = requestTypes.GENRES;
-  const initHref = unauthApiUrl(`tracks?linked_partitioning=1&limit=20&offset=0&tags=${genre}`, '&');
+function setArtistBio(bio) {
+  return {
+    type: actionTypes.SET_ARTIST_BIO,
+    bio
+  }
+}
+
+export const fetchArtistBio = (nextHref, artist) => (dispatch) => {
+  const artistUrl = `http://soundcloud.com/${artist}`;
+  const resolveUrl = 'resolve?url=' + artistUrl;
+  const requestType = requestTypes.ARTISTS;
+  const initHref = unauthApiUrl(resolveUrl, '&');
+  const url = nextHref || initHref;
+
+  return fetch(url)
+    .then(resolved => fetch(resolved.url))
+    .then(body => body.json())
+    .then(data => {
+      const bio = data.description || ''
+      dispatch(setArtistBio(bio))
+      dispatch(setRequestInProcess(false, requestType))
+    })
+}
+
+export const fetchActivitiesByArtist = (nextHref, artist) => (dispatch, getState) => {
+  const requestType = requestTypes.ARTISTS;
+  const initHref = unauthApiUrl(`tracks?linked_partitioning=1&limit=10&offset=0&tags=${artist}`, '&');
   const url = nextHref || initHref;
   const requestInProcess = getState().request[requestType];
-
   if (requestInProcess) { return; }
 
   dispatch(setRequestInProcess(true, requestType));
@@ -30,8 +53,8 @@ export const fetchActivitiesByGenre = (nextHref, genre) => (dispatch, getState) 
     .then(data => {
       const normalized = normalize(data.collection, arrayOf(trackSchema));
       dispatch(mergeEntities(normalized.entities));
-      dispatch(mergeActivitiesByGenre(normalized.result, genre));
-      dispatch(setPaginateLink(data.next_href, genre));
+      dispatch(mergeActivitiesByArtist(normalized.result, artist));
+      dispatch(setPaginateLink(data.next_href));
       dispatch(setRequestInProcess(false, requestType));
     });
 };

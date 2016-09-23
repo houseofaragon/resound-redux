@@ -4,7 +4,7 @@
   right: 0;
   top: 0;
   width: 100%;
-  height: $padding * 3;
+  height: $padding * 4;
   border-bottom: $darkBorder;
   z-index: 1;
 
@@ -21,20 +21,24 @@
     height: 100%;
     justify-content: space-between;
 
+    a.menu-item:visited {
+      color: $fontColor;
+    }
+
     .menu-item {
+      display: inline-block;
       font-size: $menuSize;
       text-transform: uppercase;
       margin: 0 ($padding / 2);
       padding: ($padding / 8) 0;
 
       &-selected, &:hover {
+        color: $mainColor;
         border-bottom: 1px solid $mainColor;
       }
     }
 
-    a.menu-item:visited {
-      color: $fontColor;
-    }
+
 
     div {
       margin: auto ($padding * 2);
