@@ -25,7 +25,7 @@ class Browse extends React.Component {
   }
 
   componentDidUpdate() {
-    if (!this.needToFetchActivities()) { return; }
+    if (!this.needToFetchActivities()) { return }
     this.fetchActivitiesByArtist();
     this.fetchArtistBio()
   }
@@ -62,13 +62,21 @@ class Browse extends React.Component {
           />
         </div>
         <div className="dashboard-side">
-          <h1>{artist}</h1>
-          <p>{bio}</p>
+          <ArtistBio artist={artist} bio={bio} />
         </div>
         <LoadingSpinner isLoading={requestsInProcess[requestTypes.ARTISTS] && browseActivities[artist]} />
       </div>
     );
   }
+}
+
+const ArtistBio = ({ artist, bio }) => {
+  return (
+    <div>
+      <h1>{artist}</h1>
+      <p>{bio}</p>
+    </div>
+  )
 }
 
 function mapStateToProps(state, routerState) {

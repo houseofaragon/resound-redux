@@ -8,73 +8,71 @@ import { ARTISTS, DEFAULT_ARTIST } from '../../constants/artists'
 import { browse, fave, dashboard } from '../../constants/pathnames'
 import classNames from 'classnames';
 
-function getArtistLink(artist) {
-  return browse + '?artist=' + artist;
+const getArtistLink = (artist) => {
+  return browse + '?artist=' + artist
 }
-
 
 const Logo = () => {
   return (
     <div>
-      <Link to={browse}>
-        <h1>Berghain</h1>
-      </Link>
+      <Link to={browse}> <h1>Berghain</h1> </Link>
     </div>
   )
 }
 
-function MenuItem({ pathname, selectedArtist, artist }) {
-  if (pathname !== browse) { return null; }
-
+const MenuItem = ({ selectedArtist, artist }) => {
   const linkClass = classNames(
     'menu-item',
     {
       'menu-item-selected': artist === selectedArtist
     }
-  );
+  )
 
   return (
     <Link to={getArtistLink(artist)} className={linkClass}>
       {artist}
     </Link>
-  );
+  )
 }
 
-function MenuList({ selectedArtist, pathname }) {
+const MenuList = ({ selectedArtist, pathname }) => {
   return (
     <div>
       {map((artist, idx) => {
-        const menuItemProps = { artist, selectedArtist, pathname };
-        return <MenuItem key={idx} { ...menuItemProps } />;
+        const menuItemProps = { artist, selectedArtist, pathname }
+        return <MenuItem key={idx} { ...menuItemProps } />
       }, ARTISTS)}
     </div>
-  );
+  )
 }
 
 const Login = ({ onLogin }) => {
-  return (
-    <Link onClick={onLogin} to={dashboard}>
-      Login
-    </Link>
-  )
+  return <Link onClick={onLogin} to={dashboard}> Login </Link>
 }
 
 const Logout = ({ onLogout }) => {
-  return (
-    <Link onClick={onLogout} to={browse}>
-      Logout
-    </Link>
-  )
+  return <Link onClick={onLogout} to={browse}> Logout </Link>
 }
 
-const SessionAction = ({ currentUser, onLogin, onLogout }) => {
-  return (
-    <div>
-      { currentUser ? <Logout onLogout={onLogout} /> : <Login onLogin={onLogin} /> }
-    </div>
-  )
+const UserIcon = () => {
+  return <Link to={dashboard}> Dashboard </Link>
 }
 
+const SessionAction = ({ currentUser, pathname, onLogin, onLogout }) => {
+  const renderSessionLink = () => {
+    if (currentUser && pathname && pathname !== '/dashboard') {
+      return <UserIcon />
+    } else if (currentUser && pathname && pathname === '/dashboard') {
+      return <Logout onLogout={ onLogout } />
+    } else {
+      return <Login onLogin={ onLogin } />
+    }
+  }
+
+  return (
+    <div> {renderSessionLink()} </div>
+  )
+}
 
 const Header = ({ currentUser, artist, pathname, onLogin, onLogout, onChangeLocation }) => {
   return (
@@ -82,7 +80,7 @@ const Header = ({ currentUser, artist, pathname, onLogin, onLogout, onChangeLoca
       <div className="header-content">
         <Logo />
         <MenuList selectedArtist={artist} pathname={pathname} />
-        <SessionAction currentUser={currentUser} onLogin={onLogin} onLogout={onLogout} />
+        <SessionAction currentUser={currentUser} pathname={pathname} onLogin={onLogin} onLogout={onLogout} />
       </div>
       <div className="header-hidden">
         <a href="#" onClick={() => onChangeLocation(fave)}>...</a>
@@ -120,9 +118,6 @@ Header.defaultProps = {
   artist: DEFAULT_ARTIST
 }
 
-const HeaderContainer = connect(mapStateToProps, mapDispatchToProps)(Header);
+const HeaderContainer = connect(mapStateToProps, mapDispatchToProps)(Header)
 
-export {
-  Header,
-  HeaderContainer
-}
+export { Header, HeaderContainer }

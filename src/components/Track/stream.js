@@ -55,7 +55,7 @@ function TrackStream({
 
   const isVisible = isSameTrack(activeTrackId)(activity.id);
   const isSameAndPlaying = isSameTrackAndPlaying(activeTrackId, activity.id, isPlaying);
-  const toggleStyle = { display: 'none' }
+
   const trackClass = classNames(
     'track',
     {
@@ -118,12 +118,12 @@ function TrackStream({
               isActive={activeDurationFilterType !== filterTypes.ALL}
             /> / {fromNow(created_at)}</div>
         </div>
-        <div className="track-content-footer" >
-          <div style={toggleStyle}>
-            <InfoList information={information} on isVisible={isVisible} />
+        <div className="track-content-footer">
+          <div>
+            <InfoList information={information} />
           </div>
-          <div className="track-content-footer-actions" style={toggleStyle}>
-            <TrackActionsContainer activity={activity} isVisible={isVisible}/>
+          <div className="track-content-footer-actions">
+            <TrackActionsContainer activity={activity} />
           </div>
         </div>
       </div>

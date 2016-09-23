@@ -19,7 +19,7 @@ function FollowingsList({
 }) {
   return (
     <List
-      title="Following"
+      title="Followings"
       ids={followings}
       entities={userEntities}
       nextHref={nextHref}
@@ -28,7 +28,7 @@ function FollowingsList({
       currentUser={currentUser}
       onToggleMore={() => onSetToggle(toggleTypes.FOLLOWINGS)}
       onFetchMore={() => onFetchFollowings(currentUser, nextHref)}
-      kind="TRACK"
+      kind="USER"
     />
   );
 }

@@ -25,7 +25,6 @@ function setArtistBio(bio) {
 export const fetchArtistBio = (nextHref, artist) => (dispatch) => {
   const artistUrl = `http://soundcloud.com/${artist}`;
   const resolveUrl = 'resolve?url=' + artistUrl;
-  const requestType = requestTypes.ARTISTS;
   const initHref = unauthApiUrl(resolveUrl, '&');
   const url = nextHref || initHref;
 
@@ -35,7 +34,6 @@ export const fetchArtistBio = (nextHref, artist) => (dispatch) => {
     .then(data => {
       const bio = data.description || ''
       dispatch(setArtistBio(bio))
-      dispatch(setRequestInProcess(false, requestType))
     })
 }
 
