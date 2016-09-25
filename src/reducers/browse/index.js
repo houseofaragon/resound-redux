@@ -5,14 +5,14 @@ const initialState = {};
 export default function(state = initialState, action) {
   switch (action.type) {
     case actionTypes.MERGE_ARTIST_ACTIVITIES:
-      return mergeActivities(state, action.activities, action.artist);
+      return mergeArtistActivities(state, action.activities, action.artist);
     case actionTypes.SET_ARTIST_BIO:
       return setArtistBio(state, action);
   }
   return state;
 }
 
-function mergeActivities(state, list, artist) {
+function mergeArtistActivities(state, list, artist) {
   const oldList = state[artist] || [];
 
   const newList = [

@@ -4,12 +4,16 @@ import map from '../../services/map';
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import * as actions from '../../actions/index'
-import { ARTISTS, DEFAULT_ARTIST } from '../../constants/artists'
+import { ARTISTS, DEFAULT_ARTIST, DEFAULT_ARTISTS } from '../../constants/artists'
 import { browse, fave, dashboard } from '../../constants/pathnames'
 import classNames from 'classnames';
 
 const getArtistLink = (artist) => {
   return browse + '?artist=' + artist
+}
+
+const getVenueLink = (artistVenue) => {
+  return browse + '?venue=' + artistVenue
 }
 
 const Logo = () => {
@@ -20,14 +24,28 @@ const Logo = () => {
   )
 }
 
-const MenuItem = ({ selectedArtist, artist }) => {
+const VenueItem = ({ selectedArtist, artistVenue, artists, pathname }) => {
+  const linkClass = classNames(
+    'menu-item',
+    {
+      'menu-item-selected': artistVenue === selectedArtist
+    }
+  )
+  console.log('artists: ', artists)
+  return (
+    <Link to={getVenueLink(artistVenue)} onClick={() => ArtistList(artists, pathname, selectedArtist)} className={linkClass}>
+      {artistVenue}
+    </Link>
+  )
+}
+
+const ArtistItem = ({ selectedArtist, artist }) => {
   const linkClass = classNames(
     'menu-item',
     {
       'menu-item-selected': artist === selectedArtist
     }
   )
-
   return (
     <Link to={getArtistLink(artist)} className={linkClass}>
       {artist}
@@ -35,13 +53,28 @@ const MenuItem = ({ selectedArtist, artist }) => {
   )
 }
 
-const MenuList = ({ selectedArtist, pathname }) => {
+const VenueList = ({ selectedVenue, pathname }) => {
   return (
     <div>
       {map((artist, idx) => {
+        const artistVenue = artist.venue
+        const artists = artist.artists
+        const menuItemProps = { artistVenue, artists, selectedVenue, pathname }
+        return <VenueItem key={idx} { ...menuItemProps } />
+      }, ARTISTS)
+    }
+    </div>
+  )
+}
+
+const ArtistList = ({ artists, pathname, selectedArtist }) => {
+  return (
+   <div>
+      {map((artist, idx) => {
         const menuItemProps = { artist, selectedArtist, pathname }
-        return <MenuItem key={idx} { ...menuItemProps } />
-      }, ARTISTS)}
+        return <ArtistItem key={idx} { ...menuItemProps } />
+      }, artists)
+      }
     </div>
   )
 }
@@ -74,17 +107,18 @@ const SessionAction = ({ currentUser, pathname, onLogin, onLogout }) => {
   )
 }
 
-const Header = ({ currentUser, artist, pathname, onLogin, onLogout, onChangeLocation }) => {
+const Header = ({ currentUser, artistVenue, artists, artist, pathname, onLogin, onLogout, onChangeLocation }) => {
   return (
     <div className="header">
       <div className="header-content">
         <Logo />
-        <MenuList selectedArtist={artist} pathname={pathname} />
+        <VenueList selectedVenue={artistVenue} pathname={pathname} />
         <SessionAction currentUser={currentUser} pathname={pathname} onLogin={onLogin} onLogout={onLogout} />
       </div>
-      <div className="header-hidden">
-        <a href="#" onClick={() => onChangeLocation(fave)}>...</a>
+      <div className="header-sub-content">
+        <ArtistList artists={artists} selectedArtist={artist} pathname={pathname} />
       </div>
+
     </div>
   )
 }
@@ -108,6 +142,7 @@ const mapDispatchToProps = (dispatch) => {
 Header.propTypes = {
   currentUser: React.PropTypes.object,
   artist: React.PropTypes.string,
+  artists: React.PropTypes.array,
   pathname: React.PropTypes.string,
   onLogin: React.PropTypes.func,
   onLogout: React.PropTypes.func,
@@ -115,7 +150,8 @@ Header.propTypes = {
 }
 
 Header.defaultProps = {
-  artist: DEFAULT_ARTIST
+  artist: DEFAULT_ARTIST,
+  artists: DEFAULT_ARTISTS
 }
 
 const HeaderContainer = connect(mapStateToProps, mapDispatchToProps)(Header)

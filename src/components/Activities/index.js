@@ -20,9 +20,7 @@ function getMatchedEntities(ids, entities) {
 }
 
 function Activities({ ids, entities, activeFilter, activeSort, }) {
-  const matchedEntities = getMatchedEntities(ids, entities);
-  const filteredEntities = filter(activeFilter, matchedEntities);
-  const sortedEntities = activeSort(filteredEntities);
+  const sortedEntities = activeSort(filter(activeFilter, getMatchedEntities(ids, entities)));
 
   return (
       <div>

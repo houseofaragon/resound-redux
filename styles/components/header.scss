@@ -38,11 +38,8 @@
       }
     }
 
-
-
     div {
       margin: auto ($padding * 2);
-
       i {
         cursor: pointer;
         font-size: 20px;
@@ -52,6 +49,32 @@
           color: $mainColor;
         }
 
+      }
+    }
+  }
+
+  &-sub-content{
+    
+    display: flex;
+    justify-content: space-between;
+    background: #FFF;
+    flex-wrap: wrap;
+
+    a.menu-item:visited {
+      color: $fontColor;
+    }
+
+    .menu-item {
+      background-color: #FFF;
+      display: inline-block;
+      font-size: $menuSize;
+      text-transform: uppercase;
+      margin: 0 ($padding / 2);
+      padding: ($padding / 2) 0;
+
+      &-selected, &:hover {
+        color: $mainColor;
+        border-bottom: 1px solid $mainColor;
       }
     }
   }

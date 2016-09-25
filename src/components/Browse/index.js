@@ -72,7 +72,7 @@ class Browse extends React.Component {
 
 const ArtistBio = ({ artist, bio }) => {
   return (
-    <div>
+    <div className="dashboard-side-fixed">
       <h1>{artist}</h1>
       <p>{bio}</p>
     </div>

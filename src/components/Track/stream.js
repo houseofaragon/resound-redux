@@ -56,15 +56,9 @@ function TrackStream({
   const isVisible = isSameTrack(activeTrackId)(activity.id);
   const isSameAndPlaying = isSameTrackAndPlaying(activeTrackId, activity.id, isPlaying);
 
-  const trackClass = classNames(
-    'track',
-    {
-      'track-visible': isVisible
-    }
-  );
+  const trackClass = classNames('track', { 'track-visible': isVisible })
 
-  const playClass = classNames(
-    'fa',
+  const playClass = classNames('fa',
     {
       'fa-pause': isSameAndPlaying,
       'fa-play': !isSameAndPlaying

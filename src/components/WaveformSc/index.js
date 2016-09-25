@@ -8,7 +8,6 @@ class WaveformSc extends React.Component {
 
   componentDidMount() {
     const { activity, idx } = this.props;
-
     if (!activity) { return; }
 
     const { waveform_url, id } = activity;
